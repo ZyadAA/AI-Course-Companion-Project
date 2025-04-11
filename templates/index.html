@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/static/images/favicon.ico"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/styles.css">
+    <title>Query Processor</title>
+    <!-- <form id = "form" action="http://127.0.0.1:8080/apiwait" method="post" >
+        <input type="text" id="queryInput" name="query" placeholder="Type your query here">
+        <button type="submit">Submit</button>
+    </form> -->
+    <script>
+        async function sendQuery() {
+            // Get the value from the input textbox
+            const query = document.getElementById('queryInput').value;
+
+            // Prepare the request payload
+            const payload = {
+                query_question: query
+            };
+
+            try {
+                // Send the POST request to the Flask API
+                const response = await fetch('https://ai-tutor-tvue.onrender.com/apiwait', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                    
+                });
+
+                // const response = await fetch('http://127.0.0.1:8080/apiwait', {
+                //     method: "POST",
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify({query: "Hello, world!"}),
+                // });
+
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Parse the JSON response
+                const data = await response.json();
+
+                // Display the response in the output div
+                document.getElementById('output').innerText = data.gemini_response;
+            } catch (error) {
+                // Handle errors and display them
+                document.getElementById('output').innerText = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class = "title">
+        <p>AI Tutor</p>
+    </div>
+    <div class = "chat-input-container">
+        <!-- <label for="queryInput">Enter your query:</label> -->
+        <textarea class="chat-input" placeholder="Ask the AI Tutor" id = "queryInput"></textarea>
+        
+        <!-- <input type="text" class = "round-pill-input" id="queryInput" placeholder="Type question for AI Tutor here"> -->
+        
+        <button onclick="sendQuery()" class = "send-icon">
+        <img src = "../static/images/send_icon.png" alt = "Button Icon">
+        </button>
+    </div>
+    <div class = "answer" id="output" style="margin-top: 20px; font-weight: bold;"></div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+pypdf
+google.generativeai
+chromadb
+flask
+flask_cors
+gunicorn
